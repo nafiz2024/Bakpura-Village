@@ -8,7 +8,9 @@ const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   const response = {
     success: false,
-    message: err.message || 'Internal server error',
+    message: statusCode >= 500 && process.env.NODE_ENV === 'production'
+      ? 'Internal server error'
+      : err.message || 'Internal server error',
   };
 
   if (process.env.NODE_ENV !== 'production') {

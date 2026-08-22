@@ -3,6 +3,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const requestIdMiddleware = require('./middleware/requestIdMiddleware');
+const adminActivityAuditMiddleware = require('./middleware/adminActivityAuditMiddleware');
 const apiLimiter = require('./middleware/rateLimiter');
 const healthRoutes = require('./routes/healthRoutes');
 const adminAuthRoutes = require('./routes/adminAuthRoutes');
@@ -28,11 +30,13 @@ const documentRoutes = require('./routes/documentRoutes');
 const publicDocumentRoutes = require('./routes/publicDocumentRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const publicSettingsRoutes = require('./routes/publicSettingsRoutes');
+const auditLogRoutes = require('./routes/auditLogRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
 
 app.disable('x-powered-by');
+app.use(requestIdMiddleware);
 app.use(helmet());
 app.use(
   cors({
@@ -43,6 +47,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(adminActivityAuditMiddleware);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -78,6 +83,7 @@ app.use('/api/admin/donations', donationRoutes);
 app.use('/api/admin/finance', financeRoutes);
 app.use('/api/admin/documents', documentRoutes);
 app.use('/api/admin/settings', settingsRoutes);
+app.use('/api/admin/audit-logs', auditLogRoutes);
 if (process.env.NODE_ENV === 'development') {
   app.use('/api/admin/rbac-test', adminRbacTestRoutes);
 }

@@ -72,6 +72,10 @@ const PERMISSIONS = Object.freeze({
     VIEW: 'settings.view',
     MANAGE: 'settings.manage',
   }),
+  AUDIT: Object.freeze({
+    VIEW: 'audit.view',
+    EXPORT: 'audit.export',
+  }),
 });
 
 const ALL_PERMISSIONS = Object.freeze(Object.values(PERMISSIONS).flatMap(Object.values));

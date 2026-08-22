@@ -119,6 +119,7 @@ const changeAccess = wrap(async (req, res) => {
   if (!ACCESS_LEVELS.includes(req.body.accessLevel)) return res.status(400).json({ success: false, message: 'Invalid accessLevel' });
   const document = validId(req.params.id) && await Document.findById(req.params.id); if (!document) return missing(res);
   if (!canChangeAccessLevel(req.admin, req.adminPermissions, document, req.body.accessLevel)) return forbidden(res);
+  res.locals.auditChanges = { accessLevel: { from: document.accessLevel, to: req.body.accessLevel } };
   if (document.status === 'published' && req.body.accessLevel !== 'public') document.status = 'unpublished';
   document.accessLevel = req.body.accessLevel; document.updatedBy = req.admin._id; await document.save();
   return res.json({ success: true, data: adminDocument(document) });

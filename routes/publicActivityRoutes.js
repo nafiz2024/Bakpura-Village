@@ -1,0 +1,1 @@
+const e=require('express'),c=require('../controllers/activityController'),r=e.Router();r.get('/featured',(req,res,next)=>{Object.defineProperty(req,'query',{value:{...req.query,featured:'true',limit:req.query.limit||'6'},configurable:true});return c.publicList(req,res,next)});r.get('/',c.publicList);r.get('/:slug',c.publicDetail);module.exports=r;

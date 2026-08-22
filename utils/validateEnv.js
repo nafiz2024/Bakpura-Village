@@ -1,5 +1,5 @@
 const validateEnv = () => {
-  const missingVariables = ['MONGO_URI', 'PORT', 'CLIENT_URL'].filter(
+  const missingVariables = ['MONGO_URI', 'PORT', 'CLIENT_URL', 'JWT_SECRET'].filter(
     (name) => !process.env[name] || !process.env[name].trim(),
   );
 

@@ -1,15 +1,24 @@
 const mongoose = require('mongoose');
 
+mongoose.connection.on('disconnected', () => {
+  console.warn('MongoDB disconnected');
+});
+
+mongoose.connection.on('error', (error) => {
+  console.error(`MongoDB error: ${error.message}`);
+});
+
 const connectDB = async () => {
   const mongoUri = process.env.MONGO_URI;
 
   if (!mongoUri) {
-    throw new Error('MONGO_URI is not configured. Add it to your .env file.');
+    throw new Error('MongoDB URI must be added to .env before starting the server.');
   }
 
   try {
-    await mongoose.connect(mongoUri);
-    console.log('MongoDB connected successfully');
+    const connection = await mongoose.connect(mongoUri);
+    const { host, name } = connection.connection;
+    console.log(`MongoDB connected: ${host}/${name}`);
   } catch (error) {
     console.error(`MongoDB connection failed: ${error.message}`);
     throw error;

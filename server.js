@@ -2,9 +2,9 @@ require('dotenv').config();
 
 const mongoose = require('mongoose');
 const connectDB = require('./config/db');
+const validateEnv = require('./utils/validateEnv');
 const app = require('./app');
 
-const port = process.env.PORT || 5000;
 let server;
 let isShuttingDown = false;
 
@@ -19,7 +19,7 @@ const shutdown = async (signal) => {
   }
 
   if (mongoose.connection.readyState !== 0) {
-    await mongoose.connection.close();
+    await mongoose.disconnect();
     console.log('MongoDB connection closed');
   }
 
@@ -37,9 +37,10 @@ for (const signal of ['SIGINT', 'SIGTERM']) {
 
 const startServer = async () => {
   try {
+    validateEnv();
     await connectDB();
-    server = app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+    server = app.listen(Number(process.env.PORT), () => {
+      console.log(`Server running on port ${process.env.PORT}`);
     });
   } catch (error) {
     console.error(`Server startup failed: ${error.message}`);

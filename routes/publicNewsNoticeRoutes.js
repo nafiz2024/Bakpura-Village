@@ -1,0 +1,1 @@
+const e=require('express'),c=require('../controllers/newsNoticeController'),r=e.Router();r.get('/important',c.important);r.get('/pinned',c.pinned);r.get('/featured',c.featured);r.get('/',c.publicList);r.get('/:slug',c.publicDetail);module.exports=r;

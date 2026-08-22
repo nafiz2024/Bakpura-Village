@@ -15,6 +15,8 @@ const committeeRoutes = require('./routes/committeeRoutes');
 const publicCommitteeRoutes = require('./routes/publicCommitteeRoutes');
 const activityRoutes = require('./routes/activityRoutes');
 const publicActivityRoutes = require('./routes/publicActivityRoutes');
+const newsNoticeRoutes = require('./routes/newsNoticeRoutes');
+const publicNewsNoticeRoutes = require('./routes/publicNewsNoticeRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -45,6 +47,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/membership-applications', membershipApplicationPublicRoutes);
 app.use('/api/committees', publicCommitteeRoutes);
 app.use('/api/activities', publicActivityRoutes);
+app.use('/api/news', publicNewsNoticeRoutes);
 app.use('/api/admin/auth', adminAuthRoutes);
 app.use('/api/admin/members', memberRoutes);
 app.use('/api/admin/membership-applications', membershipApplicationAdminRoutes);
@@ -52,6 +55,7 @@ app.use('/api/admin/admin-users', adminUserRoutes);
 app.use('/api/admin/roles', roleRoutes);
 app.use('/api/admin/committees', committeeRoutes);
 app.use('/api/admin/activities', activityRoutes);
+app.use('/api/admin/news', newsNoticeRoutes);
 if (process.env.NODE_ENV === 'development') {
   app.use('/api/admin/rbac-test', adminRbacTestRoutes);
 }

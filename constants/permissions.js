@@ -33,6 +33,10 @@ const PERMISSIONS = Object.freeze({
     EDIT: 'gallery.edit',
     DELETE: 'gallery.delete',
   }),
+  CONTACT: Object.freeze({
+    VIEW: 'contact.view',
+    MANAGE: 'contact.manage',
+  }),
   FINANCE: Object.freeze({
     VIEW: 'finance.view',
     CREATE: 'finance.create',

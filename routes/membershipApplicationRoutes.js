@@ -1,0 +1,18 @@
+const express=require('express');
+const c=require('../controllers/membershipApplicationController');
+const {protectAdmin}=require('../middleware/adminAuthMiddleware');
+const {requirePermission}=require('../middleware/permissionMiddleware');
+const {PERMISSIONS}=require('../constants/permissions');
+const publicRouter=express.Router(),adminRouter=express.Router();
+publicRouter.post('/',c.submit);
+adminRouter.use(protectAdmin);
+adminRouter.get('/stats',requirePermission(PERMISSIONS.APPLICATIONS.VIEW),c.stats);
+adminRouter.get('/',requirePermission(PERMISSIONS.APPLICATIONS.VIEW),c.list);
+adminRouter.get('/:id',requirePermission(PERMISSIONS.APPLICATIONS.VIEW),c.detail);
+adminRouter.patch('/:id/review',requirePermission(PERMISSIONS.APPLICATIONS.REVIEW),c.review);
+adminRouter.patch('/:id/assign',requirePermission(PERMISSIONS.APPLICATIONS.REVIEW),c.assign);
+adminRouter.patch('/:id/request-info',requirePermission(PERMISSIONS.APPLICATIONS.REVIEW),c.requestInfo);
+adminRouter.post('/:id/approve',requirePermission(PERMISSIONS.APPLICATIONS.APPROVE),c.approve);
+adminRouter.post('/:id/reject',requirePermission(PERMISSIONS.APPLICATIONS.REJECT),c.reject);
+adminRouter.post('/:id/archive',requirePermission(PERMISSIONS.APPLICATIONS.REVIEW),c.archive);
+module.exports={publicRouter,adminRouter};

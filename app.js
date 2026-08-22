@@ -8,6 +8,7 @@ const healthRoutes = require('./routes/healthRoutes');
 const adminAuthRoutes = require('./routes/adminAuthRoutes');
 const adminRbacTestRoutes = require('./routes/adminRbacTestRoutes');
 const memberRoutes = require('./routes/memberRoutes');
+const { publicRouter: membershipApplicationPublicRoutes, adminRouter: membershipApplicationAdminRoutes } = require('./routes/membershipApplicationRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -35,8 +36,10 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/health', healthRoutes);
+app.use('/api/membership-applications', membershipApplicationPublicRoutes);
 app.use('/api/admin/auth', adminAuthRoutes);
 app.use('/api/admin/members', memberRoutes);
+app.use('/api/admin/membership-applications', membershipApplicationAdminRoutes);
 if (process.env.NODE_ENV === 'development') {
   app.use('/api/admin/rbac-test', adminRbacTestRoutes);
 }

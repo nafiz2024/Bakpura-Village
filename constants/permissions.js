@@ -42,6 +42,7 @@ const PERMISSIONS = Object.freeze({
     CREATE: 'finance.create',
     EDIT: 'finance.edit',
     APPROVE: 'finance.approve',
+    VOID: 'finance.void',
     EXPORT: 'finance.export',
   }),
   DOCUMENTS: Object.freeze({

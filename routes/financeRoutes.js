@@ -1,0 +1,20 @@
+const express = require('express');
+const controller = require('../controllers/financeController');
+const { protectAdmin } = require('../middleware/adminAuthMiddleware');
+const { requirePermission } = require('../middleware/permissionMiddleware');
+const { PERMISSIONS } = require('../constants/permissions');
+
+const router = express.Router();
+router.use(protectAdmin);
+router.get('/summary', requirePermission(PERMISSIONS.FINANCE.VIEW), controller.summary);
+router.get('/stats', requirePermission(PERMISSIONS.FINANCE.VIEW), controller.stats);
+router.get('/report', requirePermission(PERMISSIONS.FINANCE.VIEW), controller.report);
+router.get('/export', requirePermission(PERMISSIONS.FINANCE.EXPORT), controller.exportData);
+router.post('/transactions', requirePermission(PERMISSIONS.FINANCE.CREATE), controller.create);
+router.get('/transactions', requirePermission(PERMISSIONS.FINANCE.VIEW), controller.list);
+router.get('/transactions/:id', requirePermission(PERMISSIONS.FINANCE.VIEW), controller.detail);
+router.patch('/transactions/:id', requirePermission(PERMISSIONS.FINANCE.EDIT), controller.update);
+router.post('/transactions/:id/approve', requirePermission(PERMISSIONS.FINANCE.APPROVE), controller.approve);
+router.post('/transactions/:id/reject', requirePermission(PERMISSIONS.FINANCE.APPROVE), controller.reject);
+router.post('/transactions/:id/void', requirePermission(PERMISSIONS.FINANCE.VOID), controller.voidTransaction);
+module.exports = router;

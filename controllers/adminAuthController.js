@@ -47,6 +47,7 @@ const getCurrentAdmin = (req, res) =>
   res.status(200).json({
     success: true,
     admin: serializeAdmin(req.admin, { includeLastLogin: true }),
+    permissions: req.adminPermissions,
   });
 
 const logout = (req, res) => {

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const apiLimiter = require('./middleware/rateLimiter');
 const healthRoutes = require('./routes/healthRoutes');
 const adminAuthRoutes = require('./routes/adminAuthRoutes');
+const adminRbacTestRoutes = require('./routes/adminRbacTestRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -34,6 +35,9 @@ app.get('/', (req, res) => {
 
 app.use('/api/health', healthRoutes);
 app.use('/api/admin/auth', adminAuthRoutes);
+if (process.env.NODE_ENV === 'development') {
+  app.use('/api/admin/rbac-test', adminRbacTestRoutes);
+}
 app.use(notFound);
 app.use(errorHandler);
 

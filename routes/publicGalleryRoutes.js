@@ -1,0 +1,1 @@
+const e=require('express'),c=require('../controllers/galleryController'),r=e.Router();r.get('/albums/featured',c.featuredAlbums);r.get('/albums',c.publicAlbums);r.get('/albums/:slug',c.publicAlbumDetail);r.get('/media/featured',c.featuredMedia);r.get('/media',c.publicMedia);module.exports=r;

@@ -51,6 +51,7 @@ const PERMISSIONS = Object.freeze({
     EDIT: 'documents.edit',
     DOWNLOAD: 'documents.download',
     CHANGE_ACCESS: 'documents.changeAccess',
+    APPROVE: 'documents.approve',
     DELETE: 'documents.delete',
   }),
   COMMITTEE: Object.freeze({

@@ -24,6 +24,8 @@ const publicContactRoutes = require('./routes/publicContactRoutes');
 const donationRoutes = require('./routes/donationRoutes');
 const publicDonationRoutes = require('./routes/publicDonationRoutes');
 const financeRoutes = require('./routes/financeRoutes');
+const documentRoutes = require('./routes/documentRoutes');
+const publicDocumentRoutes = require('./routes/publicDocumentRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -58,6 +60,7 @@ app.use('/api/news', publicNewsNoticeRoutes);
 app.use('/api/gallery', publicGalleryRoutes);
 app.use('/api/contact', publicContactRoutes);
 app.use('/api/donations', publicDonationRoutes);
+app.use('/api/documents', publicDocumentRoutes);
 app.use('/api/admin/auth', adminAuthRoutes);
 app.use('/api/admin/members', memberRoutes);
 app.use('/api/admin/membership-applications', membershipApplicationAdminRoutes);
@@ -70,6 +73,7 @@ app.use('/api/admin/gallery', galleryRoutes);
 app.use('/api/admin/contact-messages', contactMessageRoutes);
 app.use('/api/admin/donations', donationRoutes);
 app.use('/api/admin/finance', financeRoutes);
+app.use('/api/admin/documents', documentRoutes);
 if (process.env.NODE_ENV === 'development') {
   app.use('/api/admin/rbac-test', adminRbacTestRoutes);
 }

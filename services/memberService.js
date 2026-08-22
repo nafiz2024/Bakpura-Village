@@ -1,13 +1,18 @@
 const Counter = require('../models/Counter');
 const Member = require('../models/Member');
+const WebsiteSettings = require('../models/WebsiteSettings');
 
 const generateMemberId = async (year = new Date().getFullYear(), session = null) => {
+  const settingsQuery = WebsiteSettings.findOne({ siteKey: 'bakpura-main' }).select('membership.memberIdPrefix').lean();
+  if (session) settingsQuery.session(session);
+  const settings = await settingsQuery;
+  const prefix = settings?.membership?.memberIdPrefix || 'BPK';
   const counter = await Counter.findOneAndUpdate(
     { _id: `member:${year}` },
     { $inc: { sequence: 1 } },
     { returnDocument: 'after', upsert: true, setDefaultsOnInsert: true, session },
   );
-  return `BPK-${year}-${String(counter.sequence).padStart(4, '0')}`;
+  return `${prefix}-${year}-${String(counter.sequence).padStart(4, '0')}`;
 };
 
 const createMember = async (data, adminId, { session = null } = {}) => {

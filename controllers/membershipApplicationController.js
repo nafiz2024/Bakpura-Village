@@ -5,6 +5,7 @@ const Admin = require('../models/Admin');
 const { createMember, serializeMemberListItem } = require('../services/memberService');
 const { serializeApplicationList, serializeApplicationDetail, toMemberData } = require('../services/membershipApplicationService');
 const { validateApplication, meaningfulText } = require('../validators/membershipApplicationValidator');
+const { getOrCreateSettings } = require('../services/settingsService');
 
 const wrap = (fn) => async (req, res, next) => { try { await fn(req, res); } catch (e) { next(e); } };
 const validId = (id) => mongoose.Types.ObjectId.isValid(id);
@@ -12,8 +13,11 @@ const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const activeStatuses = ['pending', 'under-review', 'more-info-required'];
 
 const submit = wrap(async (req, res) => {
+  const settings = await getOrCreateSettings();
+  if (!settings.membership.applicationsEnabled) return res.status(503).json({ success: false, message: 'Membership applications are currently unavailable' });
   const { errors, value } = validateApplication(req.body);
   if (errors.length) return res.status(400).json({ success: false, message: errors.join('; ') });
+  if (!settings.membership.allowedTypes.includes(value.membership.type)) return res.status(400).json({ success: false, message: 'Selected membership type is not currently available' });
   const duplicates = [{ 'contact.phone': value.contact.phone }];
   if (value.contact.email) duplicates.push({ 'contact.email': value.contact.email });
   if (await MembershipApplication.exists({ status: { $in: activeStatuses }, $or: duplicates }))

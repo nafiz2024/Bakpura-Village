@@ -19,4 +19,13 @@ const moneyToString = (input) => {
   return `${whole}.${fraction.padEnd(2, '0').slice(0, 2)}`;
 };
 
-module.exports = { normalizeAmount, toDecimal128, moneyToString };
+const amountAtLeast = (amount, minimum) => {
+  const toCents = (value) => {
+    const normalized = normalizeAmount(value);
+    const [whole, fraction] = normalized.split('.');
+    return BigInt(whole) * 100n + BigInt(fraction);
+  };
+  return toCents(amount?.toString ? amount.toString() : amount) >= toCents(minimum);
+};
+
+module.exports = { normalizeAmount, toDecimal128, moneyToString, amountAtLeast };
